@@ -8,7 +8,7 @@ import {
     ImageSourcePropType
 } from 'react-native';
 import { Camera } from 'expo-camera';
-import { CapturedPicture } from 'expo-camera/build/Camera.types';
+import { CameraCapturedPicture } from 'expo-camera';
 import axios from 'axios';
 
 import { useCamera, ICamera } from './camera/useCamera';
@@ -27,27 +27,25 @@ export default function App() {
 }
 
 function CameraContainer({ camera }: { camera: ICamera }) {
-    let { current: cameraRef } = useRef<Camera | null>(null);
+    let cameraRef = useRef<typeof Camera | null>(null);
     const [
         imagePreview,
         setImagePreview
     ] = useState<ImageSourcePropType | null>(null);
     const [imageText, setImageText] = useState('');
 
-    const setCameraRef = (c: Camera) => (cameraRef = c);
+    const setCameraRef = (c: typeof Camera) => (cameraRef.current = c);
 
     const takePic = async () => {
         if (cameraRef) {
-            cameraRef
-                .takePictureAsync({ base64: true, quality: 0.1 })
-                .then(picture => {
-                    setImagePreview(picture);
-                    extractTextFromPicture(picture);
-                });
+            const picture = await cameraRef.current!.takePictureAsync({ base64: true, quality: 0.1 });
+            setImagePreview(picture);
+            extractTextFromPicture(picture);
+            handlePicture(picture);
         }
     };
 
-    const extractTextFromPicture = async (picture: CapturedPicture) => {
+    const extractTextFromPicture = async (picture: CameraCapturedPicture) => {
         const data = new FormData();
         data.append('base64Image', 'data:image/jpeg;base64,' + picture.base64!);
 
@@ -60,6 +58,10 @@ function CameraContainer({ camera }: { camera: ICamera }) {
         if (response.status == 200) {
             setImageText(response.data.ParsedResults[0].ParsedText);
         }
+    };
+
+    const handlePicture = (picture: CameraCapturedPicture) => {
+        // handle picture
     };
 
     return (
