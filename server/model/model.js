@@ -5,9 +5,29 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    age: {
+    password: {
+        required: true,
+        type: String
+    },
+    username: {
+        required: true,
+        type: String
+    },
+    quantity: {
         required: true,
         type: Number
+    },
+    price : {
+        required: true,
+        type: Number
+    },
+    currency: {
+        required: true,
+        type: String
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 

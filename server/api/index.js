@@ -1,7 +1,9 @@
 require('dotenv').config();
 
-const express = require('express');
 const mongoose = require('mongoose');
+const express = require('express');
+
+const app = express();
 const mongoString = process.env.ATLAS_URI;
 
 // new, from routes folder
@@ -9,10 +11,10 @@ const routes = require('./routes/routes');
 app.use('/api', routes)
 
 // error checking
-const express = require('express');
-const router = express.Router()
 module.exports = router;
-
+router.post('/post', (req, res) => {
+    res.send('Post API')
+})
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -24,7 +26,6 @@ database.on('error', (error) => {
 database.once('connected', () => {
     console.log('Database Connected');
 })
-const app = express();
 
 app.use(express.json());
 
