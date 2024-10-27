@@ -1,34 +1,69 @@
 const mongoose = require('mongoose');
 
-const dataSchema = new mongoose.Schema({
+// Define sub-schema for the store information
+const storeSchema = new mongoose.Schema({
     name: {
-        required: true,
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        default: "N/A"
+    },
+    webpage: {
         type: String
+    }
+});
+
+// Define sub-schema for the order details
+const orderSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
     },
     password: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
     username: {
-        required: true,
-        type: String
+        type: String,
+        required: true
+    }
+});
+
+// Define sub-schema for each item in the purchased items array
+const purchasedItemSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
     },
     quantity: {
-        required: true,
-        type: Number
+        type: Number,
+        required: true
     },
-    price : {
-        required: true,
-        type: Number
+    price: {
+        type: Number,
+        required: true
+    },
+    notes: {
+        type: String,
+        default: "tbd"
     },
     currency: {
-        required: true,
-        type: String
+        type: String,
+        required: true
     },
     date: {
         type: Date,
         default: Date.now
     }
-})
+});
 
-module.exports = mongoose.model('Data', dataSchema)
+// Main schema to combine the sub-schemas
+const dataSchema = new mongoose.Schema({
+    store: storeSchema,
+    order: orderSchema,
+    purchasedItems: [purchasedItemSchema]
+});
+
+module.exports = mongoose.model('Data', dataSchema);
