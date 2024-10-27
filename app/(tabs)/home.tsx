@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { Image, StyleSheet, Platform, Button } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -7,10 +7,13 @@ import { ThemedView } from "@/components/ThemedView";
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+import { useRouter, useFocusEffect, Href } from "expo-router";
+
 export default function HomeScreen() {
+  const router = useRouter();
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#a1dbdc", dark: "#353636" }}
+      headerBackgroundColor={{ light: "#a5cfd1", dark: "#353636" }}
       headerImage={
         <Ionicons
           size={310}
@@ -23,8 +26,16 @@ export default function HomeScreen() {
         <ThemedText type="title">Receiptable</ThemedText>
       </ThemedView>
 
-      <ThemedText>Upload new purchase/receipt</ThemedText>
-      <ThemedText>View my insights</ThemedText>
+      <Button
+        title="Add a new receipt"
+        color="#66999b"
+        onPress={() => router.replace("/add-new" as Href)}
+      />
+      <Button
+        title="View your insights"
+        color="#66999b"
+        onPress={() => router.replace("/insights" as Href)}
+      />
     </ParallaxScrollView>
   );
 }

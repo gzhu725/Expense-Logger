@@ -6,7 +6,22 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+import { WebView } from "react-native-webview";
+import React, { useState } from "react";
+
 export default function Insights() {
+  const [data, setData] = useState<string>("");
+  (async () => {
+    return fetch("http://localhost:5000/visualizations")
+      .then((response) => response.text())
+      .then((text) => {
+        console.log(text);
+        setData(text);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  })();
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -22,8 +37,12 @@ export default function Insights() {
         <ThemedText type="title">Your Insights</ThemedText>
       </ThemedView>
 
-      <ThemedText>Upload new purchase/receipt</ThemedText>
-      <ThemedText>View my insights</ThemedText>
+      <ThemedText>View my purchases this month:</ThemedText>
+      <iframe
+        src="http://localhost:5001/embed/query/4/visualization/5?api_key=GZEF2ZhZ3w8dd8Zeb2zTjbVSpyWi2JlaVcAYACx8&"
+        width="340"
+        height="391"
+      ></iframe>
     </ParallaxScrollView>
   );
 }
